@@ -1,49 +1,47 @@
 # KiraziumDungeons
 
-Kirazium sunucusu icin Dungeons+ 4.1.10 entegrasyon plugin'i.
+Kirazium icin Dungeons+ 4.1.10 entegrasyon katmani.
+
+## 1.1.3 - Exact Nexo Items
+
+Bu surumun ana amaci ItemEdit ile degistirilmis Nexo itemlerinin Dungeons loot sisteminde bozulmasini engellemektir.
+
+- Nexo item Dungeons LootTable editorune eklenirken ID-only `NexoLoot` yerine tam `ItemStack` saklayan Dungeons `VanillaLoot/ItemValue` yoluna yonlendirilir.
+- Tam ItemStack; display name, lore, enchant, attributes, item components ve PDC/NBT benzeri plugin verilerini korur.
+- LootChest ve dungeon mob droplari ayni `LootTableConfiguration.generate()` yolunu kullandigi icin tek exact kayit iki yolu da kapsar.
+- Kaydetmeden once Bukkit YAML serialize -> deserialize round-trip yapilir ve `ItemStack.equals()` ile birebir dogrulanir.
+- Dogrulama gecmezse fail-closed davranilir: item bozuk sekilde kaydedilmez ve Dungeons'in ID-only NexoLoot yolu o tiklama icin engellenir.
+- Eski NexoLoot girdileri otomatik migrate edilmez. Daha once kaybolmus ItemEdit metadata'si geri uretilemez; exact koruma icin item 1.1.3 ile loot table'a yeniden eklenmelidir.
+
+## Phoenix key guvenligi
+
+Legacy Nexo-proxy Phoenix key girdileri `PhoenixKeyBridge` ile duzeltilmeye devam eder. Ancak item zaten PhoenixCrates'in gercek `phoenixcrates:key` tag'ini tasiyorsa bridge iteme dokunmaz. Boylece ItemEdit ile ozellestirilmis gercek Phoenix key de korunur. Phoenix tag okuyucusu kullanilamazsa donusum veri kaybi riskine karsi fail-closed durur.
 
 ## Mevcut sistemler
 
-- StageMonitor: KiraziumDungeons 0.2.1-beta davranisi binary olarak korunur.
-- PhoenixKeyBridge: Dungeons+ loot icindeki Nexo proxy key'i gercek PhoenixCrates fiziksel key ile degistirir.
-- PhoenixLootChestBridge: Odul sistemine dokunmadan Dungeons+ LootChest'lere PhoenixCrates goruntu/animasyon katmani ekler.
-- DungeonGlow: Dungeons+ `EntityController.entities` + session region eslesmesini kullanarak dungeon moblarini ve desteklenen Phoenix kasa modellerini parlatir.
+- StageMonitor (0.2.1-beta davranisi binary olarak korunur)
+- Exact Nexo Item Protection
+- Phoenix physical key bridge
+- Phoenix LootChest visual/model bridge
+- Dungeon mob + LootChest glow
 
-## Iptal edilen sistem
-
-Dungeon Arrow sistemi 1.1.2 ile tamamen kaldirildi. Glow sistemi son kalan moblari bulma ihtiyacini karsiladigi icin kaynak kod, komutlar ve config ayarlari artik Arrow icermiyor.
+Dungeon Arrow sistemi 1.1.2 itibariyla tamamen kaldirilmistir ve geri eklenmemistir.
+DeluxeMenus oyuncu ayarlari daha sonraki asamaya birakilmistir.
 
 ## Dogrulanan ortam
 
-- Paper 26.1.2 build 74
+- Paper 26.1.2 build 74 stable
 - Dungeons+ 4.1.10
-- PhoenixCrates 6.0.0
+- Menus 1.9.2
 - Nexo 1.28
+- PhoenixCrates 6.0.0
 - ModelEngine R4.1.0
 
 ## Komutlar
 
 - `/kd status`
 - `/kd reload`
+- `/kd exact`
 - `/kd keys`
 - `/kd phoenix`
 - `/kd glow`
-
-DeluxeMenus oyuncu ayarlari entegrasyonu daha sonra eklenecek.
-
-## Yol haritasi: Exact Nexo Item Protection
-
-Sonraki surumun ana hedefi, ItemEdit ile degistirilmis Nexo itemlerinin Dungeons+ loot sisteminde bozulmadan korunmasidir.
-
-Kabul kriterleri:
-- LootChest odullerinde ItemEdit ile degistirilmis Nexo item birebir korunacak.
-- Mob Loot Table / ground drop tarafinda ayni item birebir korunacak.
-- Display name, lore, enchant, attributes, item components ve PDC/NBT benzeri plugin verileri kaybolmayacak.
-- Dungeons sadece chance, minimum/maximum amount ve preferred slot gibi loot davranisini yonetecek; itemin kendisini Nexo ID'den sifirdan olusturmayacak.
-- PhoenixCrates key bridge bu sistemle cakismayacak; gercek Phoenix key davranisi korunacak.
-- Global ve dungeon asset loot table'larinin ikisi de kapsanacak.
-- Arrow sistemi geri getirilmeyecek.
-- DeluxeMenus oyuncu ayarlari daha sonraki asamada eklenecek.
-
-Teknik yon:
-Dungeons+ 4.1.10, Nexo itemleri varsayilan olarak Nexo ID uzerinden yeniden uretiyor. Exact koruma katmani ItemEdit'li Nexo itemleri tam ItemStack olarak saklayip generate sirasinda clone ederek geri vermelidir. Boylece ayni LootTable hem LootChest hem de mob droplarinda ayni exact itemi uretir.
