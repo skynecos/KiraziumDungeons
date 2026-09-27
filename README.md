@@ -45,3 +45,10 @@ DeluxeMenus oyuncu ayarlari daha sonraki asamaya birakilmistir.
 - `/kd keys`
 - `/kd phoenix`
 - `/kd glow`
+
+
+## 1.1.4 Nexo GUI korumasi
+
+- PhoenixKeyBridge artik `/nexo inv` ve Nexo'nun diger kendi GUI'lerinde hicbir itemi degistirmez.
+- Nexo GUI tespiti title ile degil InventoryHolder class'i ile yapilir (`com.nexomc.libs.gui.*` / `com.nexomc.nexo.*`).
+- Dungeons LootChest ve mob loot exact-item davranisi degismez.
