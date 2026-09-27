@@ -1,8 +1,9 @@
 package com.kirazium.dungeons;
 
+import com.kirazium.dungeons.modules.DungeonGlowModule;
+import com.kirazium.dungeons.modules.ExactNexoItemBridge;
 import com.kirazium.dungeons.modules.PhoenixKeyBridge;
 import com.kirazium.dungeons.modules.PhoenixLootChestBridge;
-import com.kirazium.dungeons.modules.DungeonGlowModule;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -21,6 +22,7 @@ public final class KiraziumDungeonsPlugin extends JavaPlugin {
     private PhoenixKeyBridge keyBridge;
     private PhoenixLootChestBridge lootBridge;
     private DungeonGlowModule glowModule;
+    private ExactNexoItemBridge exactNexoItemBridge;
 
     @Override
     public void onEnable() {
@@ -51,17 +53,21 @@ public final class KiraziumDungeonsPlugin extends JavaPlugin {
             return;
         }
 
+        // Register exact-item interception before other bridge modules. It only acts in the Dungeons LootTable editor.
+        exactNexoItemBridge = new ExactNexoItemBridge(this);
+        safeEnable("ExactNexoItemBridge", exactNexoItemBridge::enable);
+
         keyBridge = new PhoenixKeyBridge(this);
         safeEnable("PhoenixKeyBridge", keyBridge::enable);
 
         lootBridge = new PhoenixLootChestBridge(this);
         safeEnable("PhoenixLootChestBridge", lootBridge::enable);
 
-
         glowModule = new DungeonGlowModule(this);
         safeEnable("DungeonGlow", glowModule::enable);
 
-        getLogger().info("KiraziumDungeons " + getDescription().getVersion() + " etkin: Stage + PhoenixKey + PhoenixLootChest + Glow tek JAR.");
+        getLogger().info("KiraziumDungeons " + getDescription().getVersion()
+                + " etkin: Stage + ExactNexoItems + PhoenixKey + PhoenixLootChest + Glow tek JAR.");
     }
 
     private void scheduleStageMonitor() {
@@ -84,6 +90,7 @@ public final class KiraziumDungeonsPlugin extends JavaPlugin {
             monitorTask.cancel();
             monitorTask = null;
         }
+        if (exactNexoItemBridge != null) exactNexoItemBridge.disable();
         if (glowModule != null) glowModule.disable();
         if (lootBridge != null) lootBridge.disable();
         if (keyBridge != null) keyBridge.disable();
@@ -106,10 +113,15 @@ public final class KiraziumDungeonsPlugin extends JavaPlugin {
                 reloadConfig();
                 if (monitor != null) monitor.reload();
                 scheduleStageMonitor();
+                if (exactNexoItemBridge != null) exactNexoItemBridge.reload();
                 if (keyBridge != null) keyBridge.reload();
                 if (lootBridge != null) lootBridge.reload();
                 if (glowModule != null) glowModule.reload();
                 sender.sendMessage("\u00a7dKirazium \u00a78\u00bb \u00a7fTum dungeon modulleri yenilendi.");
+            }
+            case "exact", "items", "exactitems" -> {
+                if (exactNexoItemBridge != null) exactNexoItemBridge.sendStatus(sender);
+                else sender.sendMessage("\u00a7cExactNexoItemBridge aktif degil.");
             }
             case "keys", "key" -> {
                 if (keyBridge != null) keyBridge.sendStatus(sender);
@@ -124,9 +136,7 @@ public final class KiraziumDungeonsPlugin extends JavaPlugin {
                 else sender.sendMessage("\u00a7cDungeonGlow modulu aktif degil.");
             }
             case "status" -> sendStatus(sender);
-            default -> {
-                sender.sendMessage("\u00a7dKiraziumDungeons \u00a77/ kdungeons status|reload|keys|phoenix|glow");
-            }
+            default -> sender.sendMessage("\u00a7dKiraziumDungeons \u00a77/ kdungeons status|reload|exact|keys|phoenix|glow");
         }
         return true;
     }
@@ -139,6 +149,7 @@ public final class KiraziumDungeonsPlugin extends JavaPlugin {
         sender.sendMessage("\u00a7dKiraziumDungeons \u00a7fv" + getDescription().getVersion());
         sender.sendMessage("\u00a77Stage: \u00a7f" + (monitor != null) + " \u00a78| \u00a77Dungeons: \u00a7f" + version(d));
         sender.sendMessage("\u00a77Nexo: \u00a7f" + version(n) + " \u00a78| \u00a77Phoenix: \u00a7f" + version(p) + " \u00a78| \u00a77Mythic: \u00a7f" + version(m));
+        if (exactNexoItemBridge != null) sender.sendMessage("\u00a77Exact Nexo: \u00a7f" + exactNexoItemBridge.statusLine());
         if (keyBridge != null) sender.sendMessage("\u00a77Key mappings: \u00a7f" + keyBridge.mappingCount());
         if (lootBridge != null) sender.sendMessage("\u00a77Phoenix LootChest display: \u00a7f" + lootBridge.activeDisplayCount());
         if (glowModule != null) sender.sendMessage("\u00a77Glow: \u00a7f" + glowModule.statusLine());
