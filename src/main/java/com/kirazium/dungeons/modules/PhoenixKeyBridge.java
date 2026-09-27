@@ -156,7 +156,11 @@ public final class PhoenixKeyBridge implements Listener {
         for (String keyId : identifiers) {
             Object key = invoke(keysManager, "getKeyByIdentifier", new Class<?>[]{String.class}, keyId);
             if (key == null || !booleanMethod(key, "isEnabled", true) || booleanMethod(key, "isVirtual", false)) continue;
-            ItemStack realKey = extractItemStack(invokeNoArgs(key, "getPlainItem"));
+            // Phoenix'in gercek fiziksel key formatini kendi API yoluyla olustur.
+            // Key.createItemStack() `phoenixcrates:key` tag'ini burada ekler.
+            ItemStack realKey = extractItemStack(invokeNoArgs(key, "createItemStack"));
+            // Eski/uyumsuz API varyantlari icin sadece son fallback plain itemdir.
+            if (isEmpty(realKey)) realKey = extractItemStack(invokeNoArgs(key, "getPlainItem"));
             if (isEmpty(realKey)) continue;
             realKey.setAmount(1);
             String nexoId = nexoId(realKey);
