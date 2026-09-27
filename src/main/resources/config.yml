@@ -1,0 +1,108 @@
+# KiraziumDungeons - birleşik dungeon bridge
+# Dungeons+ 4.1.10 icin dogrulanmistir.
+
+bossbar:
+  enabled: true
+  title: "&dKirazium &8» &fYaratık: &d{mobs_remaining} &8| &fAlan: &d{spawners_activated}/{spawners_total} &8| &fSandık: &d{chests_done}/{chests_total}"
+  complete-title: "&dKirazium &8» &aBölüm temizlendi!"
+  color: PURPLE
+  style: SOLID
+
+tracking:
+  interval-ticks: 5
+  single-activation: true
+  fall-failsafe:
+    enabled: true
+    max-blocks-below-spawner: 32.0
+
+completion:
+  require-all-spawners-activated: true
+  require-personal-lootchests: true
+  require-shared-lootchests: true
+  stage-end-delay-ticks: 10
+
+debug:
+  log-session-status: false
+  log-stage-discovery: false
+
+# Dungeons+ loot'ta Phoenix key Nexo itemine donerse gercek Phoenix fiziksel key ile otomatik degistirir.
+# bind/kurulum komutu yoktur.
+phoenix-keys:
+  enabled: true
+  initial-refresh-delay-ticks: 20
+  auto-refresh-seconds: 60
+  rescan-next-tick: true
+
+# Dungeons+ LootChest = oduller Dungeons+'tan, goruntu/animasyon PhoenixCrates'ten.
+# Phoenix openCrate/reward/key/cost mekanigi bu modda cagrilmaz.
+phoenix-lootchest:
+  enabled: true
+  personal: true
+  shared: true
+  scan-ticks: 10
+  # auto = YALNIZCA tek bir kullanilabilir Phoenix kasa tipi varsa onu kullanir.
+  # Birden fazla kasa varsa secim yapmak tahmin olacagi icin hicbiri otomatik secilmez.
+  # /kd phoenix ile GERCEK ID'yi gorup buraya veya structure-map'e birebir yaz.
+  # none = eslesmesi olmayan LootChest'lere Phoenix gorunumu verme.
+  default-crate-id: auto
+
+  # ModelEngine/BetterModel PRE_OPENING + OPENING animasyonlarinin maksimum bekleme suresi.
+  max-animation-wait-ticks: 60
+
+  # EXACT Dungeons placement adi -> EXACT Phoenix crate ID.
+  # Bu iki ad yukledigin Dungeons configinden dogrulandi; tahmin degildir.
+  # Bos birakilirsa default-crate-id kullanilir.
+  # Ornek kullanim (Phoenix ID'lerini /kd phoenix ile gor):
+  # oda1odul-sol: GERCEK_CRATE_ID
+  # oda1odul-sag: BASKA_GERCEK_CRATE_ID
+  structure-map:
+    oda1odul-sol: ''
+    oda1odul-sag: ''
+
+  # Phoenix kasa modelinin konumu/yönü.
+  # AUTO = o anda Dungeons LootChest bloğunun GERÇEK Directional yönünü okur.
+  # Block Direction property fallback yalnızca gerçek blok yönü okunamazsa kullanılır.
+  # UNKNOWN veya hatalı yönlerde tahmin/fallback yapılmaz; model render edilmez ve tek uyarı verilir.
+  # Manuel facing için PhoenixCrates 6.0.0 enum adları kullanılabilir:
+  # NORTH, EAST, SOUTH, WEST, NORTH_EAST, NORTH_WEST, SOUTH_EAST, SOUTH_WEST,
+  # WEST_NORTH_WEST, NORTH_NORTH_WEST, NORTH_NORTH_EAST, EAST_NORTH_EAST,
+  # EAST_SOUTH_EAST, SOUTH_SOUTH_EAST, SOUTH_SOUTH_WEST, WEST_SOUTH_WEST
+  default-transform:
+    facing: AUTO
+    offset-x: 0.0
+    offset-y: 0.0
+    offset-z: 0.0
+
+  # EXACT Dungeons placement adına göre yön/konum override.
+  # Bu iki placement adı yüklediğin Dungeons paketinden doğrulandı.
+  # İkisinin mevcut Block Direction değeri de SOUTH; fakat AUTO bunu sabitlemez, canlı yönü okur.
+  structure-transform:
+    oda1odul-sol:
+      facing: AUTO
+      offset-x: 0.0
+      offset-y: 0.0
+      offset-z: 0.0
+    oda1odul-sag:
+      facing: AUTO
+      offset-x: 0.0
+      offset-y: 0.0
+      offset-z: 0.0
+
+# Dungeon entity/model glow.
+# Dungeons+ 4.1.10'un kendi EntityController.entities kaydi + session Region.contains kurali kullanilir.
+# ModelEngine R4.1.0 kullanan moblarda modelin kendisi parlar ve audience sadece o dungeon oyuncularidir.
+# ModelEngine modeli olmayan normal entity'lerde Bukkit glow fallback'i globaldir (renk vanilla/default).
+glow:
+  enabled: true
+  scan-ticks: 5
+  mobs:
+    enabled: true
+    # ModelEngine ActiveModel glow rengi (RGB hex, # yazmadan da olur).
+    color: 'FF5555'
+    vanilla-fallback: true
+  lootchests:
+    enabled: true
+    # ModelEngine / BetterModel destekli Phoenix display'lerinde uygulanir.
+    color: 'FF55FF'
+    # Phoenix VanillaBlockDisplayComponent bir bloktur; Entity glow API'si yoktur.
+    # Bu engine icin tahmini proxy uretilmez; /kd glow bunu unsupported olarak raporlar.
