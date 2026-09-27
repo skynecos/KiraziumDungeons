@@ -1,0 +1,13 @@
+KiraziumDungeons 1.1.2 NO-ARROW
+
+Base: 1.1.1 RUNTIME FIX.
+
+Changes:
+- Dungeon Arrow completely removed by user decision.
+- Removed ArrowModule source.
+- Removed /kiraziumarrow and /kd arrow commands.
+- Removed arrow config section and Arrow lifecycle/status code.
+- DungeonsMobSource is retained because DungeonGlow uses Dungeons 4.1.10 EntityController.entities + session Region.contains ownership filtering.
+- StageMonitor preserved binary classes unchanged.
+- Phoenix key bridge, Phoenix LootChest bridge and Glow remain unchanged.
+- DeluxeMenus integration is intentionally not included yet.
