@@ -25,6 +25,15 @@ debug:
   log-session-status: false
   log-stage-discovery: false
 
+# ItemEdit ile degistirilmis Nexo itemlerini Dungeons+ Nexo ID'sinden yeniden uretmez.
+# Dungeons LootTable editorunde Nexo item eklenirken tam ItemStack VanillaLoot olarak saklanir.
+# Ayni LootTable generate yolu LootChest ve mob drop tarafinda ortak oldugu icin ikisini de kapsar.
+exact-nexo-items:
+  enabled: true
+  # Kaydetmeden once Bukkit YAML serialize -> deserialize yapip ItemStack.equals ile birebir dogrular.
+  # Test gecmezse fail-closed: item loot'a hic eklenmez.
+  verify-yaml-roundtrip: true
+
 # Dungeons+ loot'ta Phoenix key Nexo itemine donerse gercek Phoenix fiziksel key ile otomatik degistirir.
 # bind/kurulum komutu yoktur.
 phoenix-keys:
