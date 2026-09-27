@@ -1,0 +1,24 @@
+name: KiraziumDungeons
+version: 1.1.2
+main: com.kirazium.dungeons.KiraziumDungeonsPlugin
+api-version: '1.21'
+author: Kirazium
+prefix: KiraziumDungeons
+depend:
+  - Dungeons
+softdepend:
+  - MythicMobs
+  - PlaceholderAPI
+  - Nexo
+  - PhoenixCrates
+  - ModelEngine
+  - BetterModel
+commands:
+  kiraziumdungeons:
+    description: Kirazium dungeon sistemleri yonetimi
+    aliases: [kdungeons, kdungeon, kd]
+    usage: /kiraziumdungeons status|reload|keys|phoenix|glow
+    permission: kiraziumdungeons.admin
+permissions:
+  kiraziumdungeons.admin:
+    default: op
