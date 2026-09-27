@@ -1,11 +1,12 @@
 name: KiraziumDungeons
-version: 1.1.2
+version: 1.1.3
 main: com.kirazium.dungeons.KiraziumDungeonsPlugin
 api-version: '1.21'
 author: Kirazium
 prefix: KiraziumDungeons
 depend:
   - Dungeons
+  - Menus
 softdepend:
   - MythicMobs
   - PlaceholderAPI
@@ -17,7 +18,7 @@ commands:
   kiraziumdungeons:
     description: Kirazium dungeon sistemleri yonetimi
     aliases: [kdungeons, kdungeon, kd]
-    usage: /kiraziumdungeons status|reload|keys|phoenix|glow
+    usage: /kiraziumdungeons status|reload|exact|keys|phoenix|glow
     permission: kiraziumdungeons.admin
 permissions:
   kiraziumdungeons.admin:
