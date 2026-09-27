@@ -276,7 +276,33 @@ public final class PhoenixKeyBridge implements Listener {
     public void onInventoryDrag(InventoryDragEvent event) { if(event.getWhoClicked() instanceof Player p){Inventory top=event.getView().getTopInventory();if(eligible(top))replaceInsideContainer(p,top);} }
 
     private void ensureFreshIfNeeded(){long maxAge=Math.max(10L,plugin.getConfig().getLong("phoenix-keys.auto-refresh-seconds",60L))*1000L;if(mappingsByNexoId.isEmpty()&&System.currentTimeMillis()-lastRefreshMillis>Math.min(maxAge,15000L))refreshMappingsSafe();}
-    private boolean eligible(Inventory inventory){return plugin.getConfig().getBoolean("phoenix-keys.enabled",true)&&dungeonsAvailable&&nexoAvailable&&phoenixAvailable&&nexoIdFromItem!=null&&inventory!=null&&!(inventory instanceof PlayerInventory);}
+    private boolean eligible(Inventory inventory){
+        return plugin.getConfig().getBoolean("phoenix-keys.enabled",true)
+                && dungeonsAvailable && nexoAvailable && phoenixAvailable
+                && nexoIdFromItem != null && inventory != null
+                && !(inventory instanceof PlayerInventory)
+                && !isNexoGui(inventory);
+    }
+
+    /**
+     * Nexo'nun /nexo inv ve diger kendi GUI'leri katalog/goruntuleme envanterleridir.
+     * PhoenixKeyBridge bu envanterlerde item degistirmemelidir; aksi halde katalogdaki
+     * Nexo itemi gercek Phoenix key ile yer degistirebilir ve liste gorunumu bozulur.
+     * Holder class-name kontrolu Nexo 1.28'in ItemsView -> PaginatedGui/BaseGui yoluna
+     * dayanir ve title/localization gibi degisebilecek metinlere bagli degildir.
+     */
+    private boolean isNexoGui(Inventory inventory) {
+        try {
+            Object holder = inventory.getHolder();
+            if (holder == null) return false;
+            String className = holder.getClass().getName();
+            return className.startsWith("com.nexomc.libs.gui.")
+                    || className.startsWith("com.nexomc.nexo.");
+        } catch (Throwable t) {
+            // Holder okunamazsa genel Dungeons davranisini bozmamak icin normal akisa devam et.
+            return false;
+        }
+    }
     private int replaceInsideContainer(Player viewer, Inventory inventory){
         if(mappingsByNexoId.isEmpty())return 0;
         // Fail closed: Phoenix'in kendi key tag'ini okuyamiyorsak exact/ItemEdit key'i
