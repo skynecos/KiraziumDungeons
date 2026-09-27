@@ -1,13 +1,24 @@
-KiraziumDungeons 1.1.2 NO-ARROW
+KiraziumDungeons 1.1.3 EXACT NEXO ITEM PROTECTION
 
-Base: 1.1.1 RUNTIME FIX.
+Target:
+- Paper 26.1.2 build 74 stable
+- Dungeons+ 4.1.10
+- Menus 1.9.2
+- Nexo 1.28
+- PhoenixCrates 6.0.0
 
 Changes:
-- Dungeon Arrow completely removed by user decision.
-- Removed ArrowModule source.
-- Removed /kiraziumarrow and /kd arrow commands.
-- Removed arrow config section and Arrow lifecycle/status code.
-- DungeonsMobSource is retained because DungeonGlow uses Dungeons 4.1.10 EntityController.entities + session Region.contains ownership filtering.
-- StageMonitor preserved binary classes unchanged.
-- Phoenix key bridge, Phoenix LootChest bridge and Glow remain unchanged.
-- DeluxeMenus integration is intentionally not included yet.
+1) Dungeon Arrow is fully removed (source, commands, config).
+2) ExactNexoItemBridge intercepts only Dungeons' hidden `dungeons-add-loot` action when the cursor ItemStack is a Nexo item.
+3) Instead of Dungeons NexoLoot (ID-only rebuild), the exact cursor clone is persisted as Dungeons VanillaLoot/ItemValue.
+4) Dungeons FileLootTableDAO already serializes ItemValue.getToSerializeObject() as the complete Bukkit ItemStack and reloads VanillaLoot from that map.
+5) LootChest and dungeon mob drops both consume LootTableConfiguration.generate(), therefore the exact stack is shared by both paths.
+6) Fail-closed YAML round-trip validation: before saving, exact ItemStack is serialized/deserialized through Bukkit YamlConfiguration and must satisfy ItemStack.equals(). If not, the item is rejected and Dungeons' normal NexoLoot action is suppressed for that click.
+7) Existing NexoLoot entries are not silently migrated: their historical ItemEdit metadata is already unavailable and cannot be reconstructed safely.
+8) PhoenixKeyBridge remains for old/existing ID-only Phoenix key loot entries and compatibility. If an item already carries PhoenixCrates' real `phoenixcrates:key` tag, it is never replaced, so ItemEdit changes on real keys are preserved. If that tag cannot be read, conversion fails closed instead of risking metadata loss.
+
+Preserved:
+- StageMonitor binary classes from 0.2.1-beta
+- Phoenix key bridge
+- Phoenix LootChest visual bridge
+- Dungeon glow
