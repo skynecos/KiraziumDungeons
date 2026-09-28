@@ -31,6 +31,8 @@ DeluxeMenus oyuncu ayarlari daha sonraki asamaya birakilmistir.
 ## Dogrulanan ortam
 
 - Paper 26.1.2 build 74 stable
+- Paper 26.2 build 129 stable API uyumlulugu
+- Paper 26.3 guncel API uyumlulugu (pre-release/beta dahil)
 - Dungeons+ 4.1.10
 - Menus 1.9.2
 - Nexo 1.28
@@ -52,3 +54,12 @@ DeluxeMenus oyuncu ayarlari daha sonraki asamaya birakilmistir.
 - PhoenixKeyBridge artik `/nexo inv` ve Nexo'nun diger kendi GUI'lerinde hicbir itemi degistirmez.
 - Nexo GUI tespiti title ile degil InventoryHolder class'i ile yapilir (`com.nexomc.libs.gui.*` / `com.nexomc.nexo.*`).
 - Dungeons LootChest ve mob loot exact-item davranisi degismez.
+
+## 1.1.5 Universal Paper 26.x
+
+- Tek JAR icin desteklenen Minecraft/Paper surumleri: `26.1.2`, `26.2`, `26.3`.
+- `api-version: 1.21` bilerek korunur; bu sayede 26.1.2 de yuklemeye devam eder.
+- `/kd status` aktif Minecraft/Paper surumunu ve destek durumunu gosterir.
+- 26.3 desteklenir; pre-release/beta Paper buildlerinde tam smoke-test onerilir.
+- Bilinmeyen gelecekteki bir surumde plugin kendini kapatmaz; uyarir ve fail-open calismayi dener.
+- Dungeons+ gereksinimi halen tam olarak `4.1.10`'dur.
