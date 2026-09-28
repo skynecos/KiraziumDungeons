@@ -12,10 +12,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Locale;
+import java.util.Set;
 import java.util.logging.Level;
 
 public final class KiraziumDungeonsPlugin extends JavaPlugin {
     public static final String REQUIRED_DUNGEONS_VERSION = "4.1.10";
+    public static final Set<String> SUPPORTED_MINECRAFT_VERSIONS = Set.of("26.1.2", "26.2", "26.3");
 
     private StageMonitor monitor;
     private BukkitTask monitorTask;
@@ -27,6 +29,8 @@ public final class KiraziumDungeonsPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         saveDefaultConfig();
+
+        logServerCompatibility();
 
         Plugin dungeonsPlugin = Bukkit.getPluginManager().getPlugin("Dungeons");
         if (dungeonsPlugin == null) {
@@ -147,12 +151,41 @@ public final class KiraziumDungeonsPlugin extends JavaPlugin {
         Plugin p = Bukkit.getPluginManager().getPlugin("PhoenixCrates");
         Plugin m = Bukkit.getPluginManager().getPlugin("MythicMobs");
         sender.sendMessage("\u00a7dKiraziumDungeons \u00a7fv" + getDescription().getVersion());
+        sender.sendMessage("\u00a77Minecraft/Paper: \u00a7f" + minecraftVersion() + " \u00a78| \u00a77Destek: \u00a7f" + supportLabel());
         sender.sendMessage("\u00a77Stage: \u00a7f" + (monitor != null) + " \u00a78| \u00a77Dungeons: \u00a7f" + version(d));
         sender.sendMessage("\u00a77Nexo: \u00a7f" + version(n) + " \u00a78| \u00a77Phoenix: \u00a7f" + version(p) + " \u00a78| \u00a77Mythic: \u00a7f" + version(m));
         if (exactNexoItemBridge != null) sender.sendMessage("\u00a77Exact Nexo: \u00a7f" + exactNexoItemBridge.statusLine());
         if (keyBridge != null) sender.sendMessage("\u00a77Key mappings: \u00a7f" + keyBridge.mappingCount());
         if (lootBridge != null) sender.sendMessage("\u00a77Phoenix LootChest display: \u00a7f" + lootBridge.activeDisplayCount());
         if (glowModule != null) sender.sendMessage("\u00a77Glow: \u00a7f" + glowModule.statusLine());
+    }
+
+    private void logServerCompatibility() {
+        String mc = minecraftVersion();
+        if (SUPPORTED_MINECRAFT_VERSIONS.contains(mc)) {
+            if ("26.3".equals(mc)) {
+                getLogger().warning("Minecraft/Paper 26.3 destekli. Paper 26.3 pre-release/beta build kullaniyorsan uretimde kullanmadan once tam test onerilir.");
+            } else {
+                getLogger().info("Minecraft/Paper " + mc + " KiraziumDungeons tarafindan destekleniyor.");
+            }
+            return;
+        }
+        getLogger().warning("Minecraft/Paper " + mc + " dogrulanmis destek listesinde degil. Plugin kapatilmadi; uyumluluk fail-open devam ediyor.");
+    }
+
+    private String supportLabel() {
+        String mc = minecraftVersion();
+        if ("26.3".equals(mc)) return "destekli (26.3)";
+        if (SUPPORTED_MINECRAFT_VERSIONS.contains(mc)) return "destekli";
+        return "dogrulanmamis";
+    }
+
+    private static String minecraftVersion() {
+        try {
+            return Bukkit.getMinecraftVersion();
+        } catch (Throwable ignored) {
+            return "bilinmiyor";
+        }
     }
 
     private static String version(Plugin plugin) {
