@@ -26,3 +26,4 @@ Komutlar:
 /kd glow
 
 DeluxeMenus oyuncu ayarlari bu surume dahil degildir.
+KiraziumDungeons 1.1.5: Paper 26.1.2 / 26.2 / 26.3 universal support. api-version 1.21 intentionally retained for lowest-common-version loading.
