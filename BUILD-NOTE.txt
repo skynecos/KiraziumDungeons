@@ -1,24 +1,26 @@
-KiraziumDungeons 1.1.3 EXACT NEXO ITEM PROTECTION
+KiraziumDungeons 1.1.5 UNIVERSAL 26.x
 
-Target:
-- Paper 26.1.2 build 74 stable
+Target runtime:
+- Paper 26.1.2
+- Paper 26.2
+- Paper 26.3 (current API line; pre-release/beta builds included)
 - Dungeons+ 4.1.10
 - Menus 1.9.2
 - Nexo 1.28
 - PhoenixCrates 6.0.0
 
-Changes:
-1) Dungeon Arrow is fully removed (source, commands, config).
-2) ExactNexoItemBridge intercepts only Dungeons' hidden `dungeons-add-loot` action when the cursor ItemStack is a Nexo item.
-3) Instead of Dungeons NexoLoot (ID-only rebuild), the exact cursor clone is persisted as Dungeons VanillaLoot/ItemValue.
-4) Dungeons FileLootTableDAO already serializes ItemValue.getToSerializeObject() as the complete Bukkit ItemStack and reloads VanillaLoot from that map.
-5) LootChest and dungeon mob drops both consume LootTableConfiguration.generate(), therefore the exact stack is shared by both paths.
-6) Fail-closed YAML round-trip validation: before saving, exact ItemStack is serialized/deserialized through Bukkit YamlConfiguration and must satisfy ItemStack.equals(). If not, the item is rejected and Dungeons' normal NexoLoot action is suppressed for that click.
-7) Existing NexoLoot entries are not silently migrated: their historical ItemEdit metadata is already unavailable and cannot be reconstructed safely.
-8) PhoenixKeyBridge remains for old/existing ID-only Phoenix key loot entries and compatibility. If an item already carries PhoenixCrates' real `phoenixcrates:key` tag, it is never replaced, so ItemEdit changes on real keys are preserved. If that tag cannot be read, conversion fails closed instead of risking metadata loss.
+Compatibility strategy:
+1) Keep plugin.yml api-version at 1.21 so the same JAR can load on 26.1.2, 26.2, and 26.3.
+2) Use the lowest common Bukkit/Paper API surface; no NMS/CraftBukkit implementation classes are used.
+3) Runtime version reporting explicitly recognizes 26.1.2 / 26.2 / 26.3.
+4) 26.3 is allowed; pre-release/beta deployments should be smoke-tested.
+5) Unknown future versions are warned about but are not hard-disabled.
 
-Preserved:
-- StageMonitor binary classes from 0.2.1-beta
+Preserved from 1.1.4:
+- StageMonitor binary implementation
+- Exact Nexo Item protection
 - Phoenix key bridge
+- Nexo GUI protection
 - Phoenix LootChest visual bridge
 - Dungeon glow
+- Arrow remains removed
