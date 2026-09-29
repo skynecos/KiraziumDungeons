@@ -80,3 +80,10 @@ DeluxeMenus oyuncu ayarlari daha sonraki asamaya birakilmistir.
 - The failing world comparison in `shouldFailSafeRemove` is patched to reference-identity comparison, without changing the surrounding mob/stage evaluation logic.
 - This allows the existing `mobs_remaining` evaluation and bossbar update path to complete again.
 - Bossbar remains the old layout: `Kirazium » Yaratık: X | Sandık: X/X`.
+
+
+## 1.1.7 Mob tracking fix
+
+Runtime log analysis confirmed that the optional legacy `fall-failsafe` path crashes on Paper 26.1.2 with `IncompatibleClassChangeError: Found interface org.bukkit.World, but class was expected`. This aborts StageMonitor evaluation and can leave the bossbar at `Yaratık: 0` while dungeon mobs are alive.
+
+1.1.7 restores the historical safe behavior by forcing `tracking.fall-failsafe.enabled: false` at startup and reload. The preserved StageMonitor logic is otherwise unchanged.
