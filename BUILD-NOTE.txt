@@ -1,21 +1,30 @@
-KiraziumDungeons 1.1.7 MOB TRACKING FIX
+KiraziumDungeons 1.1.7 STAGE/MOB FIX
 
-Base:
-- 1.1.6 bossbar restore
-- Paper 26.1.2 / 26.2 / 26.3 universal line
+Target:
+- Paper 26.1.2 / 26.2 / 26.3
 - Dungeons+ 4.1.10
+- Menus 1.9.2
+- Nexo 1.28
+- PhoenixCrates 6.0.0
 
-Root cause confirmed from runtime log:
-- Legacy StageMonitor enters shouldFailSafeRemove() when tracking.fall-failsafe.enabled=true.
-- Paper 26.1.2 throws IncompatibleClassChangeError: Found interface org.bukkit.World, but class was expected.
-- Stage evaluation aborts and bossbar mob counters can remain at Yaratık: 0 while mobs are alive.
+Fixes:
+1) tracking.fall-failsafe.enabled default restored to false.
+2) max-blocks-below-spawner default restored to 24.0.
+3) Preserved StageMonitor release binary patched for Paper 26.1.2+:
+   - old: org.bukkit.World.equals invokevirtual
+   - new: reference identity world comparison
+4) Patch scope is only shouldFailSafeRemove world mismatch detection.
+5) Existing mob count/stage evaluation logic is otherwise preserved.
+6) Bossbar remains: Kirazium » Yaratık: X | Sandık: X/X
 
-Fix:
-- Restore historical fall-failsafe.enabled=false.
-- Restore max-blocks-below-spawner=24.0.
-- Runtime safety guard forces false on startup and /kd reload and saves config.
-- StageMonitor tracking logic is otherwise unchanged.
-- Old bossbar layout remains Yaratık | Sandık.
+Preserved:
+- Exact Nexo Item protection
+- Phoenix key bridge
+- Nexo GUI protection
+- Phoenix LootChest
+- Dungeon glow
+- Paper 26.1.2 / 26.2 / 26.3 runtime compatibility
+- Arrow remains removed
 
-Separate Dungeons+ issue:
-- Stage 4 may still produce spawnedEntity=null in Dungeons EntityController.spawn().
+Note:
+The repository still carries StageMonitor as preserved binary logic rather than reconstructed Java source. The complete 1.1.7 source package includes the patched preserved StageMonitor.class.
