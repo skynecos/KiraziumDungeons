@@ -71,3 +71,12 @@ DeluxeMenus oyuncu ayarlari daha sonraki asamaya birakilmistir.
 - `Alan/Spawner` gostergesi varsayilan bossbardan kaldirildi.
 - Mob takip/stage degerlendirme mantigi degistirilmedi.
 - 0.2.1, 1.0.0, 1.0.1, 1.1.1 ve 1.1.5 StageMonitor karsilastirmasinda takip mantigi aynidir.
+
+
+## 1.1.7 Stage/Mob fix
+
+- Restores `tracking.fall-failsafe.enabled: false` and the old `24.0` block threshold as defaults.
+- Fixes the Paper 26.1.2+ `IncompatibleClassChangeError: Found interface org.bukkit.World, but class was expected` in the preserved StageMonitor binary.
+- The failing world comparison in `shouldFailSafeRemove` is patched to reference-identity comparison, without changing the surrounding mob/stage evaluation logic.
+- This allows the existing `mobs_remaining` evaluation and bossbar update path to complete again.
+- Bossbar remains the old layout: `Kirazium » Yaratık: X | Sandık: X/X`.
