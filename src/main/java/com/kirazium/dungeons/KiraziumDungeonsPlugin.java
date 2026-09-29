@@ -29,6 +29,7 @@ public final class KiraziumDungeonsPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         saveDefaultConfig();
+        enforceLegacySafeTrackingDefaults();
 
         logServerCompatibility();
 
@@ -80,6 +81,15 @@ public final class KiraziumDungeonsPlugin extends JavaPlugin {
         monitorTask = Bukkit.getScheduler().runTaskTimer(this, monitor::tick, 1L, interval);
     }
 
+    private void enforceLegacySafeTrackingDefaults() {
+        if (getConfig().getBoolean("tracking.fall-failsafe.enabled", false)) {
+            getLogger().warning("fall-failsafe Paper 26.x uyumlulugu icin kapatildi; stage/mob takibi eski guvenli davranisla devam edecek.");
+        }
+        getConfig().set("tracking.fall-failsafe.enabled", false);
+        getConfig().set("tracking.fall-failsafe.max-blocks-below-spawner", 24.0);
+        saveConfig();
+    }
+
     private void safeEnable(String name, ThrowingRunnable runnable) {
         try {
             runnable.run();
@@ -115,6 +125,7 @@ public final class KiraziumDungeonsPlugin extends JavaPlugin {
         switch (sub) {
             case "reload" -> {
                 reloadConfig();
+                enforceLegacySafeTrackingDefaults();
                 if (monitor != null) monitor.reload();
                 scheduleStageMonitor();
                 if (exactNexoItemBridge != null) exactNexoItemBridge.reload();
