@@ -3,7 +3,7 @@
 
 bossbar:
   enabled: true
-  title: "&dKirazium &8» &fYaratık: &d{mobs_remaining} &8| &fAlan: &d{spawners_activated}/{spawners_total} &8| &fSandık: &d{chests_done}/{chests_total}"
+  title: "&dKirazium &8» &fYaratık: &d{mobs_remaining} &8| &fSandık: &d{chests_done}/{chests_total}"
   complete-title: "&dKirazium &8» &aBölüm temizlendi!"
   color: PURPLE
   style: SOLID
