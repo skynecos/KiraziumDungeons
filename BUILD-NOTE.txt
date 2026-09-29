@@ -1,24 +1,18 @@
-KiraziumDungeons 1.1.6 BOSSBAR RESTORE
+KiraziumDungeons 1.1.7 STAGE/MOB FIX
 
-Base:
-- 1.1.5 universal Paper 26.1.2 / 26.2 / 26.3
-- Dungeons+ 4.1.10
-
-Changes:
-- Default bossbar restored to: Kirazium » Yaratık: {mobs_remaining} | Sandık: {chests_done}/{chests_total}
-- Removed the unwanted Alan/Spawner display from the packaged default config.
-- Packaged StageMonitor fallback text was patched to the same old layout.
-- Mob tracking/stage evaluation bytecode logic was not changed.
-
-Comparison:
-- StageMonitor tracking logic in 0.2.1, 1.0.0, 1.0.1, 1.1.1 and 1.1.5 is the same preserved implementation.
-- DungeonsMobSource and DungeonGlowModule sources are byte-identical between 1.1.1 and 1.1.5.
+Fixes:
+- Restored tracking.fall-failsafe.enabled default to false, matching the older behavior.
+- Restored default max-blocks-below-spawner to 24.0.
+- Patched preserved StageMonitor binary for Paper 26.1.2+ where org.bukkit.World is an interface.
+- Replaced the incompatible World.equals invokevirtual path with reference identity comparison for world mismatch detection.
+- This prevents IncompatibleClassChangeError in StageMonitor.shouldFailSafeRemove and allows stage evaluation/bossbar mob counting to complete.
+- Bossbar remains the old layout: Kirazium » Yaratık: X | Sandık: X/X.
 
 Preserved:
-- Exact Nexo Items
+- Exact Nexo Item protection
 - Phoenix key bridge
 - Nexo GUI protection
 - Phoenix LootChest
 - Glow
-- Paper 26.1.2 / 26.2 / 26.3 support
+- Paper 26.1.2 / 26.2 / 26.3 compatibility layer
 - Arrow remains removed
