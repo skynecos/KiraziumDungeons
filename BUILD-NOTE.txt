@@ -1,26 +1,24 @@
-KiraziumDungeons 1.1.5 UNIVERSAL 26.x
+KiraziumDungeons 1.1.6 BOSSBAR RESTORE
 
-Target runtime:
-- Paper 26.1.2
-- Paper 26.2
-- Paper 26.3 (current API line; pre-release/beta builds included)
+Base:
+- 1.1.5 universal Paper 26.1.2 / 26.2 / 26.3
 - Dungeons+ 4.1.10
-- Menus 1.9.2
-- Nexo 1.28
-- PhoenixCrates 6.0.0
 
-Compatibility strategy:
-1) Keep plugin.yml api-version at 1.21 so the same JAR can load on 26.1.2, 26.2, and 26.3.
-2) Use the lowest common Bukkit/Paper API surface; no NMS/CraftBukkit implementation classes are used.
-3) Runtime version reporting explicitly recognizes 26.1.2 / 26.2 / 26.3.
-4) 26.3 is allowed; pre-release/beta deployments should be smoke-tested.
-5) Unknown future versions are warned about but are not hard-disabled.
+Changes:
+- Default bossbar restored to: Kirazium » Yaratık: {mobs_remaining} | Sandık: {chests_done}/{chests_total}
+- Removed the unwanted Alan/Spawner display from the packaged default config.
+- Packaged StageMonitor fallback text was patched to the same old layout.
+- Mob tracking/stage evaluation bytecode logic was not changed.
 
-Preserved from 1.1.4:
-- StageMonitor binary implementation
-- Exact Nexo Item protection
+Comparison:
+- StageMonitor tracking logic in 0.2.1, 1.0.0, 1.0.1, 1.1.1 and 1.1.5 is the same preserved implementation.
+- DungeonsMobSource and DungeonGlowModule sources are byte-identical between 1.1.1 and 1.1.5.
+
+Preserved:
+- Exact Nexo Items
 - Phoenix key bridge
 - Nexo GUI protection
-- Phoenix LootChest visual bridge
-- Dungeon glow
+- Phoenix LootChest
+- Glow
+- Paper 26.1.2 / 26.2 / 26.3 support
 - Arrow remains removed
