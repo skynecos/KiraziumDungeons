@@ -27,3 +27,5 @@ Komutlar:
 
 DeluxeMenus oyuncu ayarlari bu surume dahil degildir.
 KiraziumDungeons 1.1.5: Paper 26.1.2 / 26.2 / 26.3 universal support. api-version 1.21 intentionally retained for lowest-common-version loading.
+
+KiraziumDungeons 1.1.7: StageMonitor Paper 26.x world-comparison compatibility fix; fall-failsafe default restored to false/24.0; mob/stage logic otherwise preserved.
