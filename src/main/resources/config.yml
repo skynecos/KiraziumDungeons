@@ -12,8 +12,8 @@ tracking:
   interval-ticks: 5
   single-activation: true
   fall-failsafe:
-    enabled: true
-    max-blocks-below-spawner: 32.0
+    enabled: false
+    max-blocks-below-spawner: 24.0
 
 completion:
   require-all-spawners-activated: true
