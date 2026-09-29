@@ -63,3 +63,11 @@ DeluxeMenus oyuncu ayarlari daha sonraki asamaya birakilmistir.
 - 26.3 desteklenir; pre-release/beta Paper buildlerinde tam smoke-test onerilir.
 - Bilinmeyen gelecekteki bir surumde plugin kendini kapatmaz; uyarir ve fail-open calismayi dener.
 - Dungeons+ gereksinimi halen tam olarak `4.1.10`'dur.
+
+
+## 1.1.6 Bossbar restore
+
+- Varsayilan bossbar tekrar `Kirazium » Yaratık: X | Sandık: X/X` bicimindedir.
+- `Alan/Spawner` gostergesi varsayilan bossbardan kaldirildi.
+- Mob takip/stage degerlendirme mantigi degistirilmedi.
+- 0.2.1, 1.0.0, 1.0.1, 1.1.1 ve 1.1.5 StageMonitor karsilastirmasinda takip mantigi aynidir.
