@@ -73,17 +73,15 @@ DeluxeMenus oyuncu ayarlari daha sonraki asamaya birakilmistir.
 - 0.2.1, 1.0.0, 1.0.1, 1.1.1 ve 1.1.5 StageMonitor karsilastirmasinda takip mantigi aynidir.
 
 
-## 1.1.7 Stage/Mob fix
-
-- Restores `tracking.fall-failsafe.enabled: false` and the old `24.0` block threshold as defaults.
-- Fixes the Paper 26.1.2+ `IncompatibleClassChangeError: Found interface org.bukkit.World, but class was expected` in the preserved StageMonitor binary.
-- The failing world comparison in `shouldFailSafeRemove` is patched to reference-identity comparison, without changing the surrounding mob/stage evaluation logic.
-- This allows the existing `mobs_remaining` evaluation and bossbar update path to complete again.
-- Bossbar remains the old layout: `Kirazium » Yaratık: X | Sandık: X/X`.
-
 
 ## 1.1.7 Mob tracking fix
 
-Runtime log analysis confirmed that the optional legacy `fall-failsafe` path crashes on Paper 26.1.2 with `IncompatibleClassChangeError: Found interface org.bukkit.World, but class was expected`. This aborts StageMonitor evaluation and can leave the bossbar at `Yaratık: 0` while dungeon mobs are alive.
+2026-09-29 runtime logunda StageMonitor'in optional `tracking.fall-failsafe` yolu Paper 26.1.2'de `IncompatibleClassChangeError: Found interface org.bukkit.World, but class was expected` ile duruyordu. Stage evaluation yarida kaldigi icin bossbar canli moblar varken `Yaratık: 0` gosterebiliyordu.
 
-1.1.7 restores the historical safe behavior by forcing `tracking.fall-failsafe.enabled: false` at startup and reload. The preserved StageMonitor logic is otherwise unchanged.
+Final duzeltme:
+- Varsayilan bossbar eski haliyle kalir: `Kirazium » Yaratık: X | Sandık: X/X`.
+- `tracking.fall-failsafe.enabled: false` ve `max-blocks-below-spawner: 24.0` geri getirildi.
+- Startup ve `/kd reload` eski configte failsafe aciksa guvenli sekilde kapatir.
+- StageMonitor'daki yalnizca Paper uyumsuz world comparison bytecode'u `World.equals` yerine reference-identity comparison olarak patchlendi.
+- Mob sayma ve stage tamamlama mantiginin diger kismi degistirilmedi.
+- Exact Nexo Items, Phoenix key, Nexo GUI korumasi, Phoenix LootChest, Glow ve Paper 26.1.2/26.2/26.3 destegi korunur.
